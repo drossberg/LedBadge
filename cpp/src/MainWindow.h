@@ -15,6 +15,8 @@
 #ifndef MAINWINDOW_INCLUDED
 #define MAINWINDOW_INCLUDED
 
+#include <QCheckBox>
+#include <QComboBox>
 #include <QLabel>
 #include <QMainWindow>
 
@@ -25,10 +27,16 @@ public:
     MainWindow(QWidget* parent = 0);
 
 public slots:
+    void SelectFont(size_t i);
     void Send(void);
 
 private:
-    QLabel* m_renderedInput;
+    QComboBox* m_brightnessSelection;
+    QCheckBox* m_blinkingSet[8];
+    QCheckBox* m_animatedBorderSet[8];
+    QComboBox* m_modeSelection[8];
+    QComboBox* m_speedSelection[8];
+    QLabel*    m_renderedInput[8];
 };
 
 
