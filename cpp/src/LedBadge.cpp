@@ -272,7 +272,7 @@ bool LedBadge::MemoryBank::SetData
         if (length > 0) {
             size_t lengthInBytes = (length - 1) / 8 + 1;
 
-            if (lengthInBytes <= ((m_MaxSize - m_HeaderSize) / 8)) {
+            if (lengthInBytes <= ((m_MaxSize - m_HeaderSize) / 11)) {
                 bankData.resize(11 * lengthInBytes);
 
                 for (size_t byteColumn = 0; byteColumn < lengthInBytes; ++byteColumn) {
