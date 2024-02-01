@@ -12,24 +12,51 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <sstream>
+
 #include "hidapi.h"
 
 #include "usb.h"
 
 
+static void Log
+(
+    std::function<void(const char* logString)>* logHandler,
+    const char*                                 logString
+) {
+    if (logHandler != nullptr)
+        (*logHandler)(logString);
+}
+
+
 void SendToUsb
 (
-    std::vector<unsigned char>& data
+    std::vector<unsigned char>&                 data,
+    std::function<void(const char* logString)>* logHandler
 ) {
     if (hid_init() == 0) {
         hid_device* ledBadgeDevice = hid_open(0x0416, 0x5020, nullptr);
 
         if (ledBadgeDevice != nullptr) {
             data.insert(data.begin(), '\x00'); // Report ID
-            hid_write(ledBadgeDevice, data.data(), data.size());
+
+            std::stringstream logstream;
+            logstream << "Info: SendToUsb(): Writing " << data.size() << " bytes";
+            Log(logHandler, logstream.str().c_str());
+
+            int bytesWritten = hid_write(ledBadgeDevice, data.data(), data.size());
+
+            logstream.str().clear();
+            logstream << "Info: SendToUsb(): " << bytesWritten << " bytes written";
+            Log(logHandler, logstream.str().c_str());
+
             hid_close(ledBadgeDevice);
         }
+        else
+            Log(logHandler, "Error: SendToUsb(): Cannot open LED Badge device, maybe not connected?");
 
         hid_exit();
     }
+    else
+        Log(logHandler, "Error: SendToUsb(): Cannot initialize HID");
 }

@@ -15,12 +15,14 @@
 #ifndef USB_INCLUDED
 #define USB_INCLUDED
 
+#include <functional>
 #include <vector>
 
 
 void SendToUsb
 (
-    std::vector<unsigned char>& data
+    std::vector<unsigned char>&                 data,
+    std::function<void(const char* logString)>* logHandler = nullptr
 );
 
 

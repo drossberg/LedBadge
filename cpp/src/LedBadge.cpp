@@ -39,7 +39,10 @@ static inline void SetHigherBits(unsigned char& byte,
 }
 
 
-LedBadge::LedBadge(void) : m_bankData() {
+LedBadge::LedBadge
+(
+    std::function<void(const char* logString)>* logHandler
+) : m_logHandler(logHandler), m_bankData() {
     static const unsigned char NullHeader[m_HeaderSize] = {
         '\x77', '\x61', '\x6e', '\x67', '\x00', // [0-4]: "wang"
         '\x00',                                 // [5]  : brightness (full), 0x00 = 100% / 0x10 = 75% / 0x20 = 50% / 0x40 = 25%
@@ -86,7 +89,7 @@ LedBadge::LedBadge(void) : m_bankData() {
 LedBadge::LedBadge
 (
     const LedBadge& original
-) : m_bankData() {
+) : m_logHandler(original.m_logHandler), m_bankData() {
     memcpy(m_header, original.m_header, m_HeaderSize);
 
     for (size_t i = 0; i < 8; ++i)
@@ -296,8 +299,10 @@ bool LedBadge::MemoryBank::SetData
                 m_parent->m_header[16 + 2 * m_index]     = lengthInBytes / 256;
                 m_parent->m_header[16 + 2 * m_index + 1] = lengthInBytes % 256;
             }
-            else
+            else {
+                m_parent->Log("Error: LedBadge::MemoryBank::SetData(): Data size to hight, max length for all banks together is 5904 pixel");
                 ret = false;
+            }
         }
         else  if (bankData.size() > 0) {
             bankData.clear();
@@ -423,6 +428,17 @@ bool LedBadge::FetchData
 
         ret = true;
     }
+    else
+        Log("Error: LedBadge::FetchData(): Data size to hight, max is 8192 bytes, try to reduce the bank data");
 
     return ret;
+}
+
+
+void LedBadge::Log
+(
+    const char* logString
+) const {
+    if (m_logHandler != nullptr)
+        (*m_logHandler)(logString);
 }

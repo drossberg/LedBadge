@@ -21,11 +21,13 @@
 
 class LedBadge {
 public:
-    LedBadge(void);
+    LedBadge(std::function<void(const char* logString)>* logHandler = nullptr);
     LedBadge(const LedBadge& original);
     ~LedBadge(void);
 
     LedBadge&  operator=(const LedBadge& original);
+
+    void       SetLogHandler(std::function<void(const char* logString)>* logHandler);
 
     enum class Brightness {
         Full,
@@ -95,10 +97,13 @@ public:
     bool       FetchData(std::vector<unsigned char>& dataCopy) const;
 
 private:
-    static const size_t        m_HeaderSize = 64;
-    static const size_t        m_MaxSize    = 8192;
-    unsigned char              m_header[m_HeaderSize];
-    std::vector<unsigned char> m_bankData[8];
+    std::function<void(const char* logString)>* m_logHandler;
+    static const size_t                         m_HeaderSize = 64;
+    static const size_t                         m_MaxSize    = 8192;
+    unsigned char                               m_header[m_HeaderSize];
+    std::vector<unsigned char>                  m_bankData[8];
+
+    void Log(const char* logString) const;
 
     friend MemoryBank;
 };
