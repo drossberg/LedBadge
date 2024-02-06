@@ -36,7 +36,7 @@ MainWindow::MainWindow
     renderedInputFont.setStyleStrategy(QFont::NoAntialias);
 
     for (size_t i = 0; i < 8; ++i) {
-        QLabel*      title      = new QLabel(tr("Bank %1:").arg(i));
+        QLabel*      title      = new QLabel(tr("Bank %1:").arg(i + 1));
         QPushButton* fontButton = new QPushButton(tr("Font"));
         QLineEdit*   input      = new QLineEdit();
 
