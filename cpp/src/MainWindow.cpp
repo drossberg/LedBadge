@@ -113,6 +113,11 @@ MainWindow::MainWindow
 
     connect(sendButton, &QPushButton::clicked, this, &MainWindow::Send);
 
+    m_logWidget = new LogWidget();
+
+    mainLayout->addItem(new QSpacerItem(10, 10), 33, 0);
+    mainLayout->addWidget(m_logWidget, 34, 0, 1, 6);
+
     setCentralWidget(centralWidget);
 }
 
@@ -134,7 +139,8 @@ void MainWindow::SelectFont
 
 
 void MainWindow::Send(void) {
-    LedBadge ledBadge;
+    std::function<void(const char* logString)> logHandler = [this](const char* logString){(*m_logWidget)(logString);};
+    LedBadge ledBadge(&logHandler);
     bool     ok = true;
 
     ledBadge.SetBrightness(static_cast<LedBadge::Brightness>(m_brightnessSelection->currentData().toInt()));
@@ -171,6 +177,6 @@ void MainWindow::Send(void) {
         std::vector<unsigned char> data;
 
         if (ledBadge.FetchData(data))
-            SendToUsb(data);
+            SendToUsb(data, &logHandler);
     }
 }

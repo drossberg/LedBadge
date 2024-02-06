@@ -1,4 +1,4 @@
-/*                         M A I N W I N D O W . H
+/*                         L O G W I D G E T . C P P
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted.
@@ -12,35 +12,20 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef MAINWINDOW_INCLUDED
-#define MAINWINDOW_INCLUDED
-
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLabel>
-#include <QMainWindow>
-
 #include "LogWidget.h"
 
 
-class MainWindow : public QMainWindow {
-    Q_OBJECT
-public:
-    MainWindow(QWidget* parent = 0);
-
-public slots:
-    void SelectFont(size_t i);
-    void Send(void);
-
-private:
-    QComboBox* m_brightnessSelection;
-    QCheckBox* m_blinkingSet[8];
-    QCheckBox* m_animatedBorderSet[8];
-    QComboBox* m_modeSelection[8];
-    QComboBox* m_speedSelection[8];
-    QLabel*    m_renderedInput[8];
-    LogWidget* m_logWidget;
-};
+LogWidget::LogWidget
+(
+    QWidget* parent
+) : QPlainTextEdit(parent) {
+    setReadOnly(true);
+}
 
 
-#endif // MAINWINDOW_INCLUDED
+void LogWidget::operator()
+(
+    const char* logString
+) {
+    insertPlainText(QString::fromUtf8(logString));
+}

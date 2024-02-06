@@ -10,6 +10,7 @@ set(CMAKE_AUTOMOC ON)
 
 set(DesignerSources
     src/LedBadge.cpp
+    src/LogWidget.cpp
     src/main.cpp
     src/MainWindow.cpp
     src/usb.cpp
