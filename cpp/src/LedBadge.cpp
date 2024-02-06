@@ -300,7 +300,7 @@ bool LedBadge::MemoryBank::SetData
                 m_parent->m_header[16 + 2 * m_index + 1] = lengthInBytes % 256;
             }
             else {
-                m_parent->Log("Error: LedBadge::MemoryBank::SetData(): Data size to hight, max length for all banks together is 5904 pixel");
+                m_parent->Log("Error: LedBadge::MemoryBank::SetData(): Data size to hight, max length for all banks together is 5904 pixel\n");
                 ret = false;
             }
         }
@@ -429,7 +429,7 @@ bool LedBadge::FetchData
         ret = true;
     }
     else
-        Log("Error: LedBadge::FetchData(): Data size to hight, max is 8192 bytes, try to reduce the bank data");
+        Log("Error: LedBadge::FetchData(): Data size to hight, max is 8192 bytes, try to reduce the bank data\n");
 
     return ret;
 }

@@ -41,22 +41,22 @@ void SendToUsb
             data.insert(data.begin(), '\x00'); // Report ID
 
             std::stringstream logstream;
-            logstream << "Info: SendToUsb(): Writing " << data.size() << " bytes";
+            logstream << "Info: SendToUsb(): Writing " << data.size() << " bytes\n";
             Log(logHandler, logstream.str().c_str());
 
             int bytesWritten = hid_write(ledBadgeDevice, data.data(), data.size());
 
             logstream.str().clear();
-            logstream << "Info: SendToUsb(): " << bytesWritten << " bytes written";
+            logstream << "Info: SendToUsb(): " << bytesWritten << " bytes written\n";
             Log(logHandler, logstream.str().c_str());
 
             hid_close(ledBadgeDevice);
         }
         else
-            Log(logHandler, "Error: SendToUsb(): Cannot open LED Badge device, maybe not connected?");
+            Log(logHandler, "Error: SendToUsb(): Cannot open LED Badge device, maybe not connected?\n");
 
         hid_exit();
     }
     else
-        Log(logHandler, "Error: SendToUsb(): Cannot initialize HID");
+        Log(logHandler, "Error: SendToUsb(): Cannot initialize HID\n");
 }
